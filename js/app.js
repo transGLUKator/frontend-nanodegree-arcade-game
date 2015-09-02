@@ -3,12 +3,11 @@ var options = {
     cols: 5,
     tileWidth: 101,
     tileHeight: 83,
-    enemyRows: [1, 2, 3],
-    playerHeight: 171
+    heightCorrection: 22
 }
 
 // Enemies our player must avoid
-var Enemy = function (row, col) {
+var Enemy = function (col, row) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
@@ -16,8 +15,8 @@ var Enemy = function (row, col) {
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 
-    this.x = 0;
-    this.y = row * options.tileHeight;
+    this.x = col * options.tileWidth;
+    this.y = row * options.tileHeight - options.heightCorrection;
     this.center = {
         x: this.x + 50,
         y: this.y + 109
@@ -39,6 +38,8 @@ Enemy.prototype.update = function (dt) {
     if (this.x >= 505 - options.tileWidth || (this.speed < 0 && this.x < 0)) {
         this.speed = -this.speed;
     }
+
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -52,17 +53,16 @@ Enemy.prototype.render = function () {
 var Player = function (col) {
     this.sprite = 'images/char-boy.png';
     this.x = col * options.tileWidth;
-    this.y = options.rows * options.tileHeight;
+    this.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
     this.center = {
         x: this.x + 50,
         y: this.y + 95
     };
     this.radius = 32;
-    this.y = options.rows * options.tileHeight - options.playerHeight / 2;
 }
 
 Player.prototype.update = function (dt) {
-    this.position = Math.sqrt(this.y * this.y + this.x * this.x);
+
 }
 
 Player.prototype.render = function () {
@@ -90,7 +90,7 @@ Player.prototype.handleInput = function (key) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(1, 0), new Enemy(2, 1), new Enemy(3,4)];
+var allEnemies = [new Enemy(0, 1), new Enemy(1, 2), new Enemy(4,3)];
 var player = new Player(2);
 
 
