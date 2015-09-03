@@ -32,6 +32,9 @@ Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    var dx,
+        dy,
+        distance;
 
     this.x += this.speed * dt;
     this.center.x += this.speed * dt;
@@ -39,7 +42,17 @@ Enemy.prototype.update = function (dt) {
         this.speed = -this.speed;
     }
 
+    dx = this.center.x - player.center.x;
+    dy = this.center.y - player.center.y;
 
+    distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < this.radius + player.radius) {
+        setTimeout(function () {
+            player.x = 202;
+            player.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
+        }, 50);
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -62,15 +75,19 @@ var Player = function (col) {
 }
 
 Player.prototype.update = function (dt) {
+
     if (this.x < 0) this.x = 0;
     if (this.x + options.tileWidth > options.cols * options.tileWidth) this.x = (options.cols - 1) * options.tileWidth;
     if (this.y < 0) {
         this.y = -options.heightCorrection;
-        setTimeout(function(){
+        setTimeout(function () {
             this.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
-        }.bind(this), 250);
+        }.bind(this), 50);
     }
     if (this.y + options.tileHeight > options.rows * options.tileHeight) this.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
+
+    this.center.x = this.x + 50;
+    this.center.y = this.y + 109;
 
 }
 
@@ -99,7 +116,7 @@ Player.prototype.handleInput = function (key) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var allEnemies = [new Enemy(0, 1), new Enemy(1, 2), new Enemy(4,3)];
+var allEnemies = [new Enemy(0, 1), new Enemy(1, 2), new Enemy(4, 3)];
 var player = new Player(2);
 
 
