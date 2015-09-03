@@ -62,6 +62,15 @@ var Player = function (col) {
 }
 
 Player.prototype.update = function (dt) {
+    if (this.x < 0) this.x = 0;
+    if (this.x + options.tileWidth > options.cols * options.tileWidth) this.x = (options.cols - 1) * options.tileWidth;
+    if (this.y < 0) {
+        this.y = -options.heightCorrection;
+        setTimeout(function(){
+            this.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
+        }.bind(this), 250);
+    }
+    if (this.y + options.tileHeight > options.rows * options.tileHeight) this.y = (options.rows - 1) * options.tileHeight - options.heightCorrection;
 
 }
 
